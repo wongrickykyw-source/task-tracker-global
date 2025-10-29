@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公司任務追蹤器</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 20px; background-color: #f6f8fa; }
+        h1, h2 { color: #333; }
+        #login-section, #task-section {
+            border: 1px solid #d1d5da;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 24px;
+            max-width: 450px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        #task-section { display: none; }
+        ul { list-style: none; padding: 0; }
+        /* 讓每個任務項目可以點擊 */
+        li { 
+            padding: 8px 0; 
+            border-bottom: 1px solid #eee; 
+            cursor: pointer; /* 顯示滑鼠指標，提示可點擊 */
+            display: flex; /* 讓內容對齊 */
+            align-items: center;
+        }
+        li:hover {
+             background-color: #f0f0f0; 
+        }
+        .task-text {
+            flex-grow: 1; /* 讓任務文字佔滿空間 */
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+        label { display: block; margin-bottom: 8px; font-weight: 500; }
+        input[type="text"], input[type="password"] {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #007aff;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover { background-color: #005bb5; }
+        #login-message { color: red; font-size: 14px; }
+        
+        /* 新增任務輸入框的樣式 */
+        #new-task-form input[type="text"] {
+            width: 70%;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>公司任務追蹤器</h1>
+    <div id="login-section">
+        <h2>登入</h2>
+        <form id="login-form">
+            <div>
+                <label for="username">使用者名稱:</label>
+                <input type="text" id="username" required>
+            </div>
+            <br>
+            <div>
+                <label for="password">密碼:</label>
+                <input type="password" id="password" required>
+            </div>
+            <br>
+            <button type="submit">登入</button>
+        </form>
+        <p id="login-message"></p>
+    </div>
+
+    <div id="task-section">
+        <h2>我的任務</h2>
+        
+        <form id="new-task-form" style="display: flex; align-items: center; margin-bottom: 20px;">
+            <input type="text" id="new-task-input" placeholder="輸入新的任務內容..." required>
+            <button type="submit">新增任務</button>
+        </form>
+
+        <ul id="task-list"></ul>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
