@@ -1,19 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 獲取頁面上所有的 DOM 元素 (包含新增的)
+    // 獲取頁面上所有的 DOM 元素
     const loginSection = document.getElementById('login-section');
     const taskSection = document.getElementById('task-section');
     const loginForm = document.getElementById('login-form');
     const loginMessage = document.getElementById('login-message');
     const taskList = document.getElementById('task-list');
-    
-    // 【新增】獲取新增任務相關的元素
     const newTaskForm = document.getElementById('new-task-form');
     const newTaskInput = document.getElementById('new-task-input');
 
-    const API_URL = 'http://192.168.1.202:3000';
+    // 【重要】後端伺服器的 URL (請替換成你 Render 上的實際網址！)
+    const API_URL = 'https://task-tracker-global.onrender.com';
 
-    // 1. 監聽登入表單的提交事件 (保持不變)
+    // 1. 監聽登入表單的提交事件
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); 
         const username = document.getElementById('username').value;
@@ -39,15 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (error) {
-            loginMessage.textContent = '無法連接到伺服器';
+            loginMessage.textContent = '無法連接到伺服器或網路錯誤。';
         }
     });
     
-    // 2. 【新增】監聽新增任務表單的提交事件
+    // 2. 監聽新增任務表單的提交事件
     newTaskForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        // 獲取輸入框的值，並清除頭尾空白
         const text = newTaskInput.value.trim(); 
 
         if (!text) {
@@ -56,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // 向後端發送 POST 請求來新增任務
             const response = await fetch(`${API_URL}/api/tasks`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -64,9 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                // 如果成功，清空輸入框
                 newTaskInput.value = ''; 
-                // 重新載入任務列表，以顯示新任務
                 loadTasks(); 
             } else {
                 alert('新增任務失敗！');
@@ -79,12 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. 處理點擊任務 (標記完成) 的函式
     async function toggleTaskCompleted(taskId, currentCompleted) {
-        
-        // 設定新的狀態
         const newCompletedStatus = !currentCompleted;
 
         try {
-            // 向後端發送 PUT 請求來更新任務狀態
             const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -92,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                // 如果成功，重新載入任務列表
                 loadTasks();
             } else {
                 alert('更新任務狀態失敗！');
@@ -104,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // 4. 載入任務的函式 (已修改，增加點擊監聽器)
+    // 4. 載入任務的函式 (增加點擊監聽器)
     async function loadTasks() {
         try {
             const response = await fetch(`${API_URL}/api/tasks`);
@@ -113,22 +103,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tasks.forEach(task => {
                 const li = document.createElement('li');
-                // 將任務 ID 儲存在 li 元素上，方便後續操作
-                li.setAttribute('data-id', task.id);
-                li.setAttribute('data-completed', task.completed); 
                 
-                li.textContent = task.text;
+                // 創建任務文字元素
+                const taskText = document.createElement('span');
+                taskText.textContent = task.text;
+                taskText.classList.add('task-text');
                 
-                if (task.completed) {
-                    li.classList.add('completed'); // 應用 CSS 樣式
-                }
-                
-                // 【關鍵】為每個任務項目新增點擊事件監聽器
-                li.addEventListener('click', () => {
-                    // 點擊時，呼叫 toggleTaskCompleted 函式
+                // 點擊文字時標記完成/未完成
+                taskText.addEventListener('click', () => {
                     toggleTaskCompleted(task.id, task.completed);
                 });
-
+                
+                if (task.completed) {
+                    taskText.classList.add('completed'); 
+                }
+                
+                li.appendChild(taskText);
                 taskList.appendChild(li);
             });
 

@@ -18,19 +18,19 @@
         }
         #task-section { display: none; }
         ul { list-style: none; padding: 0; }
-        /* 讓每個任務項目可以點擊 */
         li { 
             padding: 8px 0; 
             border-bottom: 1px solid #eee; 
-            cursor: pointer; /* 顯示滑鼠指標，提示可點擊 */
-            display: flex; /* 讓內容對齊 */
+            cursor: pointer; 
+            display: flex; 
             align-items: center;
+            justify-content: space-between; /* 讓內容和按鈕左右對齊 */
         }
         li:hover {
              background-color: #f0f0f0; 
         }
         .task-text {
-            flex-grow: 1; /* 讓任務文字佔滿空間 */
+            flex-grow: 1; 
         }
         .completed {
             text-decoration: line-through;
@@ -56,10 +56,15 @@
         button:hover { background-color: #005bb5; }
         #login-message { color: red; font-size: 14px; }
         
-        /* 新增任務輸入框的樣式 */
+        #new-task-form {
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 20px;
+        }
         #new-task-form input[type="text"] {
             width: 70%;
             margin-right: 10px;
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -86,7 +91,7 @@
     <div id="task-section">
         <h2>我的任務</h2>
         
-        <form id="new-task-form" style="display: flex; align-items: center; margin-bottom: 20px;">
+        <form id="new-task-form">
             <input type="text" id="new-task-input" placeholder="輸入新的任務內容..." required>
             <button type="submit">新增任務</button>
         </form>
